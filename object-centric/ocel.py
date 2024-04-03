@@ -6,7 +6,7 @@ import pandas as pd
 
 def frequency_matrix(file_path, profile):
     """
-    Generate the activity frequency matrix based on the activities in an OCEL log file.
+    Generate the activity frequency matrix based on the activities in an OCEL log file and a profile.
 
     Args:
         file_path (str): Path to the OCEL log file.
