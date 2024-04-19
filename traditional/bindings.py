@@ -8,7 +8,7 @@ from dep_matrix import *
 def output_arcs(dep_graph):
     """Identify the potential output bindings of each activity in a dependency graph
     based on its outgoing arcs.
-    Take a dependency graph as input.
+    Take a dependency graph as argument.
     """
     out_arcs = []
     out_bindings = {}
