@@ -30,7 +30,7 @@ def input_arcs(dep_graph):
     """
     Identify the potential input bindings of each activity in a dependency graph
     based on its incoming arcs.
-    Take a dependency graph as input.
+    Take a dependency graph as argument.
     """
     in_arcs = []
     in_bindings = {}
@@ -51,7 +51,7 @@ def in_bindings(activity_frequencies):
     """
     This is used in the dependency graph function.
     Calculate input bindings of each activity.
-    Take dictionary of activities as input.
+    Take dictionary of activities as argument.
     """
     fr = activity_frequencies
     in_filter = {}
@@ -108,7 +108,7 @@ def out_bindings(activity_frequencies):
     """
     This is used in the dependency graph function.
     Calculate output bindings of each activity.
-    Take dictionary of activities and their sucessors as input.
+    Take dictionary of activities with their sucessors as argument.
     """
     fr = activity_frequencies
 
