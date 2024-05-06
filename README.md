@@ -4,6 +4,7 @@ Traditional C-nets
 Here a description of the files and functions in the sequence followed to mine the C-nets (traditional process mining)
 
 1 - read a log file in csv format
+  
   file import_log -- function def read_log(path): input csv, output dictionary 'log' {caseID:event(task, eid, timestamp)}
   
 2 - count activity totals
@@ -18,14 +19,14 @@ Here a description of the files and functions in the sequence followed to mine t
   
 4 - convert frequencies dictionary into a Dataframe
   """Convert the activity frequencies dictionary into a dataframe in pandas with frequencies"""
-  
   The Dataframe is the frequency matrix where each row shows how many times one activity is followed by activities in the log (each activity is a column)
+  
   file dep_matrix -- function def frequencies(act_frequencies): input nested dictionary 'act_frequencies', output pd Dataframe 'frequencies' (index: activity name, column: activity name)
   
 5 - calculate the dependency measure
-  """Generate the dependency matrix Dataframe"""
+  """Generate the dependency matrix Dataframe"""  
+  This is to visualize the dependency matrix, although the algorithm only uses the dependency measures in the form of dictionary, the dependency_dict.
   
-  It is good to visualize the dependency matrix, although the algorithm only uses the dependency measures in the form of dictionary, the dependency_dict.
   file dep_matrix -- function def dependency_matrix(frequencies): input Dataframe 'frequencies', output Dataframe 'dependency_matrix' (index: activity name, column: activity name). The cells show the dependency measure of the activity to the other activity
   
 6 - convert dependency matrix Dataframe to dictionary
