@@ -6,7 +6,7 @@ from dep_matrix import *
 
 
 def output_arcs(dep_graph):
-    """Identify the potential output bindings of each activity in a dependency graph
+    """Identify the output activities (arcs) of each activity in a dependency graph
     based on its outgoing arcs.
     Take a dependency graph as argument.
     """
@@ -28,7 +28,7 @@ def output_arcs(dep_graph):
 
 def input_arcs(dep_graph):
     """
-    Identify the potential input bindings of each activity in a dependency graph
+    Identify the input activities (arcs) of each activity of a dependency graph
     based on its incoming arcs.
     Take a dependency graph as argument.
     """
@@ -49,8 +49,8 @@ def input_arcs(dep_graph):
 
 def in_bindings(activity_frequencies):
     """
-    This is used in the dependency graph function.
-    Calculate input bindings of each activity.
+    This is used in the dependency graph function of file dep_graph.
+    Calculate all potential input bindings of each activity.
     Take dictionary of activities as argument.
     """
     fr = activity_frequencies
@@ -107,7 +107,7 @@ def in_bindings(activity_frequencies):
 def out_bindings(activity_frequencies):
     """
     This is used in the dependency graph function.
-    Calculate output bindings of each activity.
+    Calculate all the potential output bindings of each activity.
     Take dictionary of activities with their sucessors as argument.
     """
     fr = activity_frequencies

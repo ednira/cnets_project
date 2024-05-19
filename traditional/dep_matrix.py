@@ -1,11 +1,11 @@
 import pandas as pd
 import numpy as np 
-from import_log import read_log
+from import_log import *
 import os
 
 
 def activity_total(log):
-   """Calculate total activity counts and store them in a dictionary. A total activity counts is how many times an activity happened"""
+   """Calculate total activity counts and store them in a dictionary. A total activity count is how many times an activity occurs"""
    
    act_total = dict()
    
@@ -74,19 +74,20 @@ def dependency_matrix(frequencies):
 
    freq = frequencies
 
-   dependencies = {}
+   def calculate_dependency(pair):
+      a, b = pair
+      if b == a:
+         return freq.loc[a,b]/(freq.loc[a,b] + 1)
+      else:
+         return (freq.loc[a,b] - freq.loc[b,a])/(freq.loc[a,b] + freq.loc[b,a] + 1)
+                  
+   
+   dependency_matrix = pd.DataFrame(index=freq.index, columns=freq.columns)
 
-   for key in freq:
-      dependencies[key] = {}
-      for value in freq.keys(): 
-         dependencies[key][value] = {}
-         if value == key:
-               dependencies[key][value] = freq[key][value]/(freq[key][value]+1)
-         else:
-               dependencies[key][value] = (freq[key][value] - freq[value][key])/(freq[key][value] + freq[value][key] + 1)
-   
-   dependency_matrix = pd.DataFrame.from_dict(dependencies)
-   
+   for col in freq.columns:
+      for index in freq.index:
+         dependency_matrix.loc[index,col] = calculate_dependency((index,col))
+
    return dependency_matrix
 
 
@@ -98,52 +99,37 @@ def dependency_dict(dependency_matrix):
    return dependency_dict
 
 
-def find_long_distance(lst, a, b):
-   """Count successor activity occurrences"""
-   pairs_count = 0
-   last_a_index = None
-   min_distance = 2
-
-   for i, element in enumerate(lst):
-      if element == a:
-         last_a_index = i
-      elif element == b and last_a_index is not None and i - last_a_index >= min_distance:
-         pairs_count += 1
-
-   return pairs_count
-
 
 def long_distance_dependency(act_total, traces):
-   """Calculate if one activity eventually follows another one"""
-   act_total_list = list()
-   
-   successors_list = dict()
-   long_dep = dict()
+      """Calculate if one activity eventually follows another one"""
+      # Get unique activities
+      all_activities = []
 
-   counter = 0
-   sum = 0
-   
-   for key in act_total:
-      act_total_list.append(key)
+      for activity in act_total:
+         all_activities.append(activity)
 
-   for activity in act_total_list:
-      if activity not in successors_list:
-         successors_list[activity] = dict()
-      successors = [e for i, e in enumerate(act_total_list) if e != activity] 
-      for successor in successors:
-         for trace in traces.values():
-            counter += find_long_distance(trace, activity, successor)
-         sum += counter
-         successors_list[activity][successor] = sum
-         counter = 0
-         sum = 0
-   
-   for activity in successors_list:
-      long_dep[activity] = dict()
-      for successor in successors_list[activity]:
-         if successors_list[activity][successor] > 0:
-            long_dep[activity][successor] = ((2*successors_list[activity][successor])/(act_total[activity]+act_total[successor]+1)) - ((2*abs(act_total[activity]-act_total[successor])/(act_total[activity]+act_total[successor]+1)))
-         else:
-            long_dep[activity][successor] = 0
-   
-   return long_dep
+      # Initialize dictionaries to count long distance frequencies and dependencies
+      long_freq = {a: {b: 0 for b in all_activities} for a in all_activities}
+
+      long_dep = {a: {b: 0 for b in all_activities} for a in all_activities}
+
+      # Iterate over traces and count the frequencies
+      for trace in traces.values():
+         for i in range(len(trace)):
+               for j in range(i + 1, len(trace)):
+                  a = trace[i]
+                  b = trace[j]
+                  if b != a and j - i > 1:
+                     long_freq[a][b] += 1
+      
+      for activity in long_freq:
+         for successor in long_freq[activity]:
+               freq = long_freq[activity][successor]
+               if freq > 0:
+                  # Calculate the long_distnce_dependency 
+                  long_dep[activity][successor] = ((2 * freq) / (act_total[activity] + act_total[successor] + 1)) - ((2 * abs(act_total[activity] - act_total[successor])) / (act_total[activity] + act_total[successor] + 1))
+               else:
+                  # If no occurrences, set the dependency value to 0
+                  long_dep[activity][successor] = 0
+
+      return long_dep

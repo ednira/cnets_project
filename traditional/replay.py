@@ -1,7 +1,7 @@
 from collections import Counter
 
 def output_bindings(traces, out_arcs, in_arcs):
-    """Find the output bindings for each activity based on its out_arcs and in_arcs of the dependency graph 
+    """Find the output bindings for each activity based on its output_arcs (function) and input_arcs (function) of the dependency graph 
     and replay of the traces
     """
 
@@ -65,7 +65,7 @@ def output_bindings(traces, out_arcs, in_arcs):
 
 
 def input_bindings(traces, out_arcs, in_arcs):
-    """Find the put bindings for each activity based on its in_arcs and out_arcs of the dependency graph 
+    """Find the input bindings for each activity based on its in_arcs and out_arcs of the dependency graph 
     and replay of the traces
     """
     inbindings = {}

@@ -4,7 +4,7 @@ from bindings import *
 
 
 def best_dependency(dependency_dict):
-    """Create a dictionary of all activity_total and their best successor candidates"""
+    """Create a nested dictionary of all activity_total and their best successor candidates, where the activity is the outer, the successor activity is the inner key and the dependency measure is the inner value"""
     
     best_dependency = {}
 
@@ -17,11 +17,11 @@ def best_dependency(dependency_dict):
     return best_dependency
 
 
-def dependency_graph(activity_total, activity_frequencies, dependency_dict, long_dep, long_distance=0.9, act_threshold=1, frequency_threshold=1, dependency_threshold=0.9):
-    """Create a dictionary with all activity_total connected based on frequencies, dependencies, and thresholds.
+def dependency_graph(activity_total, activity_frequencies, dependency_dict, long_dep, long_distance=0.8, act_threshold=1, frequency_threshold=1, dependency_threshold=0.9):
+    """Create a dictionary with all activities in activity_total connected based on frequencies, dependencies, and thresholds.
     Long_dep is a dictionary with long-distance dependency measures of activities in relation to one another, like the dependency measure.
     It is obtained using the function "def long_distance_dependency(act_total, traces)".
-    The resutlt is like this:
+    The result is like this:
     {'a': {'e': 0.8641975308641975, 'b': -0.2903225806451613, 'c': -0.2903225806451613, 'd': -0.6551724137931034}, 'e': {'a': 0, 'b': 0, 'c': 0, 'd': 0}, 
     'b': {'a': 0, 'e': -0.2903225806451613, 'c': 0, 'd': 0}, 'c': {'a': 0, 'e': -0.2903225806451613, 'b': 0, 'd': 0}, 'd': {'a': 0, 'e': 0, 'b': 0, 'c': 0}}
     """

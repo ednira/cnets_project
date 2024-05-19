@@ -1,32 +1,33 @@
 import os
 from collections import OrderedDict
+import csv
 
 
 def read_log(path):
    """Read a csv log and save it to a dictionary with events sorted by timestamp."""
-   f = open(path, 'r')
-
    log = dict() 
 
-   for line in f:
-      line = line.strip()
-      if len(line) == 0:
-         continue
-      parts = line.split(';')
-      caseID = parts[0]
-      task = parts[1]
-      user = parts[2]
-      timestamp = parts[3]
+   with open(path, 'r', newline='') as csvfile:
+      reader = csv.DictReader(csvfile)
 
-      if caseID not in log:
-         log[caseID] = []
-      event = (task, user, timestamp)
-      log[caseID].append(event)
+      for row in reader:
+         case_col = next((col for col in reader.fieldnames if col.lower() == 'case:concept:name'), None)
+         task_col = next((col for col in reader.fieldnames if col.lower() == 'concept:name'), None)
+         eid_col = next((col for col in reader.fieldnames if 'eid' in col.lower()), None)
+         time_col = next((col for col in reader.fieldnames if 'timestamp' in col.lower()), None)
 
-   for caseID in sorted(log.keys()):
-      log[caseID].sort(key = lambda event: event[-1])
+         caseID = row.get(case_col)
+         task = row.get(task_col)
+         eid = row.get(eid_col)
+         timestamp = row.get(time_col)
 
-   f.close()
+         if caseID not in log:
+            log[caseID] = []
+         event = (task, eid, timestamp)
+         log[caseID].append(event)
+
+      for caseID in sorted(log.keys()):
+         log[caseID].sort(key = lambda event: event[-1])
 
    return log
 
