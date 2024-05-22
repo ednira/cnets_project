@@ -13,17 +13,17 @@ def read_log(path):
       for row in reader:
          case_col = next((col for col in reader.fieldnames if col.lower() == 'case:concept:name'), None)
          task_col = next((col for col in reader.fieldnames if col.lower() == 'concept:name'), None)
-         eid_col = next((col for col in reader.fieldnames if 'eid' in col.lower()), None)
+         user_col = next((col for col in reader.fieldnames if col.lower() == 'user'), None)
          time_col = next((col for col in reader.fieldnames if 'timestamp' in col.lower()), None)
 
          caseID = row.get(case_col)
          task = row.get(task_col)
-         eid = row.get(eid_col)
+         user = row.get(user_col)
          timestamp = row.get(time_col)
 
          if caseID not in log:
             log[caseID] = []
-         event = (task, eid, timestamp)
+         event = (task, user, timestamp)
          log[caseID].append(event)
 
       for caseID in sorted(log.keys()):
