@@ -1,7 +1,7 @@
 # Object-centric Causal nets
 
 This is the repository for the Object-centric C-nets master thesis project at DSV/SU 😊
-There are two folders: 
+There are two folders: [traditional] (traditional)
 
 ### Traditional C-nets
 Here a description of the files and functions in the sequence followed to mine the C-nets (traditional process mining)
