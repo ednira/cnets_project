@@ -1,6 +1,9 @@
-This is the repository for the Object-centric C-nets master thesis project at DSV/SU.
+# Object-centric Causal nets
 
-Traditional C-nets
+This is the repository for the Object-centric C-nets master thesis project at DSV/SU 😊
+There are two folders: 
+
+### Traditional C-nets
 Here a description of the files and functions in the sequence followed to mine the C-nets (traditional process mining)
 
 1 - read a log file in csv format -
