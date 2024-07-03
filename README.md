@@ -15,6 +15,7 @@ Here is a description of the steps followed to mine C-nets from a log with a sin
 
 
 **2 - mine traces**
+  
   The traces are mined from the log.
 
 **3 count activity totals**
