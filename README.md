@@ -13,7 +13,9 @@ Here is a description of the steps followed to mine C-nets from a log with a sin
   
   file import_log -- function def read_log(path): input csv, output dictionary 'log' {caseID:event(task, eid, timestamp)}
   
-**2 - count activity totals**
+**2 - mine traces
+
+count activity totals**
   
   This counts the occurrences of each activity in the log.
   
