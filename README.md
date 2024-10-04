@@ -1,8 +1,6 @@
 ${\textsf{\huge{\color{teal}Object-centric Causal Nets}}}$
 
-This is the repository for the Object-centric C-nets master thesis project at DSV/SU 😊
-
-Folders contain files related to traditional and object-centric process discovery.
+This is the repository for the Object-centric C-nets master thesis project at DSV/SU. Folders contain files related to traditional and object-centric process discovery.
 
 ### Traditional C-nets
 <img width="120" alt="Cnet" src="https://github.com/ednira/cnets_project/assets/69249709/a0794eb0-7f80-4aa7-bf58-93725495bbef">
