@@ -1,4 +1,4 @@
-
+import warnings
 import pathlib
 from collections import Counter, namedtuple
 import csv
@@ -10,6 +10,8 @@ import numpy as np
 
 import pm4py
 from pm4py.statistics.ocel import ot_activities as ot
+
+warnings.filterwarnings('ignore')
 
 
 def import_log(ocel_path, profile=None):
@@ -730,7 +732,7 @@ def best_predecessor(dependency_matrix):
     return best_predecessors
 
 
-def dependency_graph(activity_total, original_start, original_end, frequencies, dep_matrix, dependency_dict, long_dep, long_distance=0.9, act_threshold=1, frequency_threshold=1, dependency_threshold=0.98):
+def dependency_graph(activity_total, original_start, original_end, frequencies, dep_matrix, dependency_dict, long_dep, dependency_threshold=0.98):
     """
     Create a graph with all activities as nodes connected by edges based on frequencies, dependencies, and thresholds.
     Long_dep is a dictionary with long-distance dependency measures of activities in relation to one another, like the dependency measure. It is obtained using the function "def long_distance_dependency(act_total, traces)".
@@ -746,6 +748,10 @@ def dependency_graph(activity_total, original_start, original_end, frequencies, 
     Returns:
 
     """
+    # These variables were removed from this function args and moved here
+    long_distance=0.9
+    act_threshold=1
+    # frequency_threshold=1
 
     Graph = namedtuple("Graph", ["nodes", "edges", "is_directed"])
     dep_graph = Graph
@@ -1370,7 +1376,7 @@ def ot_graph(graph, act_total, activities, dep_dict, cnet_inbindings, cnet_outbi
     return nodes_df, vis_edges, seq_i, seq_o
 
 
-def subgraphs_dict(path,long_distance=0.9,act_threshold=1, frequency_threshold=10, dependency_threshold=0.95):
+def subgraphs_dict(path):
     """
     Generate the dictionary with object types and respective nodes and edges to be used in the visualization of C-nets.
 
@@ -1396,9 +1402,6 @@ def subgraphs_dict(path,long_distance=0.9,act_threshold=1, frequency_threshold=1
     seq_o = 1
 
     for obj_type in all_traces:
-        act_threshold = act_threshold
-        frequency_threshold = frequency_threshold
-        dependency_threshold = dependency_threshold
         ot_traces = all_traces[obj_type]
 
         act_total = activity_total(logs[obj_type])
@@ -1413,8 +1416,8 @@ def subgraphs_dict(path,long_distance=0.9,act_threshold=1, frequency_threshold=1
         dep_dict = dependency_dict(dep)
 
         long = long_distance_dependency(act_total, ot_traces, or_start, or_end)
-
-        depgraph = dependency_graph(act_total, or_start, or_end, freq, dep, dep_dict, long, long_distance, act_threshold, frequency_threshold, dependency_threshold)
+        
+        depgraph = dependency_graph(act_total, or_start, or_end, freq, dep, dep_dict, long)
 
         # Generate the arcs based on the edges of the dep_graph
         in_arcs = input_arcs(depgraph)

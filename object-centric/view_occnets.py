@@ -1,7 +1,15 @@
+import warnings
+
 import random
 import pandas as pd
 import graphviz
 import seaborn as sns
+
+from IPython import display
+from PIL import Image
+
+
+warnings.filterwarnings('ignore')
 
 
 def all_ot_visualization(ot_activities, ot_sequence, subgraphs_dict, profile=None):
@@ -243,7 +251,11 @@ def all_ot_visualization(ot_activities, ot_sequence, subgraphs_dict, profile=Non
     graph.attr(colorscheme='pastel28', nodesep='0.5', ranksep='0.5', pad='1', splines='spline', rankdir='TB') # , ratio='1.7' , newrank='false'
 
     # Render the graph
-    graph.render('graphviz_cnet', format='png', cleanup=True)
+    graphviz.set_jupyter_format('png')
+    graph.render('graphviz_cnet', format='png', cleanup=True, view=False)
+    # Display the graph in this computer
+    # graph.view()
 
-    # Display the graph
-    graph.view()
+    # Display the graph in Jupyter Notebook
+    img = Image.open('graphviz_cnet.png')
+    display.display_png(img)
