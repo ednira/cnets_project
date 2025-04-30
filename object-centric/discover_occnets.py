@@ -14,6 +14,7 @@ from pm4py.statistics.ocel import ot_activities as ot
 warnings.filterwarnings('ignore')
 
 
+
 def import_log(ocel_path):
     """
     Generate the OCEL dataframe based on the activities in an OCEL log and a profile.
@@ -64,6 +65,70 @@ def import_log(ocel_path):
         print("An error occurred:", str(e))
         return None
     
+
+
+def ot_act_stats(event_to_obj):
+    """
+    Calculate total count, mean, median, min, and max of OT in each activity based on the events dataframe and store them in respective dictionaries.
+    
+    Args:
+        event_to_obj (pd.DataFrame): rows are events, columns are ocel:eid, ocel:oid, ocel:qualifier, ocel:activity, ocel:timestamp, ocel:type
+        total_act (dict): dictionary with total counts of activities
+    Returns:
+        Dictionary (dict): keys are activity names and values are the corresponding total counts.
+        Dictionary (dict): nested dictionaries where outer keys are activity names, inner keys are OT names and values are the OT stattistics in each activity. The statistics are returned in five dictionaries: 
+        total activity counts, object counts per activity, mean, median, min, max of objects for each OT in each activity.
+    
+    """
+
+    ## Total counts of each activity (how many times an activity occurs in the log)
+    # Drop duplicates to ensure each 'ocel:eid' counts only once per 'ocel:activity'
+    unique_activities = event_to_obj[['ocel:eid', 'ocel:activity']].drop_duplicates()
+    total_act = unique_activities['ocel:activity'].value_counts().to_dict()
+
+
+    # Counts of each OT objects per activity
+    ot_counts = (
+        event_to_obj.groupby(['ocel:activity', 'ocel:type'])
+        .size()
+        .unstack(fill_value=0)
+        .to_dict(orient='index')
+    )
+
+    obj_mean = {
+        activity: {obj_type: np.round(np.mean(count / total_act[activity]),2)
+                for obj_type,count in counts.items()}
+        for activity,counts in ot_counts.items()
+    }
+
+    # Count objects of each object type per event and in each activity
+    obj_counts = event_to_obj.groupby(["ocel:activity", "ocel:eid", "ocel:type"]).size().reset_index(name="count")
+
+    # Compute median, min, and max count per activity and OT
+    obj_aggregated = obj_counts.groupby(["ocel:activity", "ocel:type"])["count"].agg(["median", "min", "max"]).reset_index()
+
+    # Store statistics in nested dictionaries
+    obj_median = (
+        obj_aggregated.groupby("ocel:activity")
+        .apply(lambda x: dict(zip(x["ocel:type"], np.round(x["median"]).astype(int))))
+        .to_dict()
+    )
+
+    obj_min = (
+        obj_aggregated.groupby("ocel:activity")
+        .apply(lambda x: dict(zip(x["ocel:type"], x["min"])))
+        .to_dict()
+    )
+
+    obj_max = (
+        obj_aggregated.groupby("ocel:activity")
+        .apply(lambda x: dict(zip(x["ocel:type"], x["max"])))
+        .to_dict()
+    )
+
+    return total_act, ot_counts, obj_mean, obj_median, obj_min, obj_max
+
+
 
 
 def flatten_log(ocel, ot_activities):
@@ -170,8 +235,10 @@ def traces(flattened_logs):
 
     return all_traces
 
+
+
 def activity_total(log):
-   """Calculate total activity counts and store them in a dictionary. A total activity count is how many times an activity occurs"""
+   """Calculate total activity counts for each OT and store them in a dictionary. A total activity count is how many times an activity occurs"""
    
    act_total = dict()
    
@@ -500,7 +567,7 @@ def best_predecessor(dependency_matrix):
     
     best_predecessors = {}
     # Create the dependency dict using the columns
-    # This shows the dependencies of preecessors, instead of successors
+    # This shows the dependencies of predecessors, instead of successors
     dependency_by_columns_dict = dependency_matrix.to_dict()
 
     for key,value in dependency_by_columns_dict.items():
@@ -512,10 +579,11 @@ def best_predecessor(dependency_matrix):
     return best_predecessors
 
 
-def dependency_graph(activity_total, original_start, original_end, frequencies, dep_matrix, dependency_dict, long_dep, dependency_threshold=0.98):
+def dependency_graph(activity_total, original_start, original_end, frequencies, dep_matrix, dependency_dict, long_dep, dependency_threshold):
     """
     Create a graph with all activities as nodes connected by edges based on frequencies, dependencies, and thresholds.
     Long_dep is a dictionary with long-distance dependency measures of activities in relation to one another, like the dependency measure. It is obtained using the function "def long_distance_dependency(act_total, traces)".
+    
     Args:
     activity_total (dict): contains the activities and their counts
     original_start (list): contains the start activities mined from the traces
@@ -525,7 +593,9 @@ def dependency_graph(activity_total, original_start, original_end, frequencies, 
     dependency_dict (dict): contains the dependency measures of an activity in relations to others
     long_dep (dict): contains the long-distance dependency measures of an activity in relations to others
     thresholds long_distance=0.8, act_threshold=1, frequency_threshold=1, dependency_threshold=0.9
+    
     Returns:
+    Graph: a named tuple ("Graph", ["nodes", "edges", "is_directed"])
 
     """
     # These variables were removed from this function args and moved here
@@ -825,13 +895,19 @@ def input_bindings(traces, out_arcs, in_arcs):
     return cnet_inbindings
 
 
-def ot_graph(graph, act_total, activities, dep_dict, cnet_inbindings, cnet_outbindings, seq_i, seq_o):
+def ot_graph(graph, act_total, total_activities, ot_counts, mean_dict, median_dict, min_dict, max_dict, activities, dep_dict, cnet_inbindings, cnet_outbindings, seq_i, seq_o):
     """
     Generate dataframes with nodes and edges to be used in the visualization of C-nets for the given graph.
 
     Args:
         graph (Graph): namedtuple("Graph", ["nodes", "edges", "is_directed"]) where nodes are activities and edges are dependencies based on thresholds.
-        act_total (dictionary): dictionary representing the total frequency of activities in the log, where the key is the activity and the value is the frequency.
+        act_total (dictionary): dictionary representing the total frequency of activities in the flattened OT log, where the key is the activity and the value is the frequency.
+        total_activities (dictionary): dictionary representing the total frequency of activities in the ocel log, where the key is the activity and the value is the frequency.
+        ot_counts (dictionary): dictionary with the counts of objects of each OT for each activity in the log.
+        mean_dict (dictionary): dictionary with the mean values of each activity for the OT in the log.
+        median_dict (dictionary): dictionary with the median values of each activity in the log.
+        min_dict (dictionary): dictionary with the minimum values of each activity for the OT in the log.
+        max_dict (dictionary): dictionary with the maximum values of each activity for the OT in the log.
         activities (dictionary): nested dictionary presenting as outer key the activity, as inner key the activities that follow it with frequency as value.
         dep_dict (dictionary): nested dictionary representing the dependency measures between activities.
         cnet_inbindings (dictionary): nested dictionary with the input bindings (inner keys) for each activity (outer keys) based on its output_arcs and input_arcs of the dependency graph generated for the defined thresholds and replay of the traces.
@@ -841,11 +917,51 @@ def ot_graph(graph, act_total, activities, dep_dict, cnet_inbindings, cnet_outbi
         ot_edges (Dataframe): dataframe containing the edges of the C-nets to be used in the visualization.
     """
 
+    # Substitute the act_total dict for total_activities dict. However, in this function it will continue to be called act_total
+    #act_total = total_activities
+
     # ---- Create a dataframe of NODES with attributes, based on graph.nodes ----
     nodes_df = pd.DataFrame({'node': [node for node in graph.nodes if node not in ['start', 'end']]})
     nodes_df['act_total'] = nodes_df['node'].map(act_total).astype(str)
-    # nodes_df['label'] = nodes_df['node'].map(lambda x: f'<<FONT>{x}</FONT>>')
-    nodes_df['label'] = nodes_df['node'].map(lambda x: f'<<FONT>{x}</FONT><BR/><FONT POINT-SIZE="16">{act_total.get(x, "Unknown")}</FONT>>')
+    
+    # Node label WITHOUT frequency
+    nodes_df['label'] = nodes_df['node'].map(lambda x: f'<<FONT POINT-SIZE="25">{x}</FONT>>')
+
+    # Node label WITH frequency
+    # nodes_df['label'] = nodes_df['node'].map(lambda x: f'<<FONT POINT-SIZE="25">{x}</FONT><BR/><FONT POINT-SIZE="16">{total_activities.get(x, "Unknown")}</FONT>>')
+
+
+    # Add tooltip to nodes that show statistics of OT related to the activity
+    
+    def generate_tooltip(activity):
+        """
+        Generate the tooltip of each activity."""
+        obj_counts = ot_counts.get(activity, {})
+        mean_values = mean_dict.get(activity, {})
+        median_values = median_dict.get(activity, {})
+        min_values = min_dict.get(activity, {})
+        max_values = max_dict.get(activity, {})
+
+        tooltip_lines = []
+
+        for obj, count in obj_counts.items():
+            if count > 0:
+                mean = mean_values.get(obj, 0)
+                median = median_values.get(obj, "N/A")
+                min_val = min_values.get(obj, "N/A")
+                max_val = max_values.get(obj, "N/A")
+                
+                tooltip_lines.append(
+                    f"OT {obj}: {count}, mean = {mean}, median = {median}, min = {min_val}, max = {max_val}"
+                )
+        merged_tooltip = '\n'.join(tooltip_lines)
+
+        return merged_tooltip
+    
+
+    nodes_df["tooltip"] = nodes_df['node'].map(generate_tooltip)
+    
+
     new_columns = {
         'type': 'activity',
         'source': 'NaN', 
@@ -941,7 +1057,7 @@ def ot_graph(graph, act_total, activities, dep_dict, cnet_inbindings, cnet_outbi
     # Create DataFrame from new_nodes, append it to the existing nodes dataframe and reorder columns in the final df
     new_nodes_df = pd.DataFrame(new_nodes)
     nodes_df = nodes_df._append(new_nodes_df, ignore_index=True)
-    nodes_df = nodes_df[['node','type','source','target','binding','len_binding','label', 'act_total','color','intensity','shape','size','obj_group']]
+    nodes_df = nodes_df[['node','type','source','target','binding','len_binding','label', 'tooltip', 'act_total','color','intensity','shape','size','obj_group']]
 
 
     # ---- Create INPUT BINDING NODES in the nodes_df dataframe based on the inbindings dictionary ----
@@ -1156,21 +1272,22 @@ def ot_graph(graph, act_total, activities, dep_dict, cnet_inbindings, cnet_outbi
     return nodes_df, vis_edges, seq_i, seq_o
 
 
-def subgraphs_dict(path):
+def subgraphs_dict(path, dependency_threshold):
     """
     Generate the dictionary with object types and respective nodes and edges to be used in the visualization of C-nets.
 
     Args:
         path (str): the OCEL log path
     Returns:
-        ot_graphs_dict (dict): dictionary where the keys are the object types and the values are tuples of nodes and edges.
+        ot_subgraphs_dict (dict): dictionary where the keys are the object types and the values are tuples of nodes and edges.
     """
     ocel, ot_activities, event_to_obj, obj_to_obj = import_log(path)
     flt = flatten_log(ocel, ot_activities)
     logs = read_log(flt)
 
     all_traces = traces(flt)
-   
+
+    activity_counts, ot_counts, mean_dict, median_dict, min_dict, max_dict = ot_act_stats(event_to_obj)
 
     ot_subgraphs_dict = {}
 
@@ -1194,7 +1311,7 @@ def subgraphs_dict(path):
 
         long = long_distance_dependency(act_total, ot_traces, or_start, or_end)
         
-        depgraph = dependency_graph(act_total, or_start, or_end, freq, dep, dep_dict, long)
+        depgraph = dependency_graph(act_total, or_start, or_end, freq, dep, dep_dict, long, dependency_threshold)
 
         # Generate the arcs based on the edges of the dep_graph
         in_arcs = input_arcs(depgraph)
@@ -1206,7 +1323,7 @@ def subgraphs_dict(path):
 
         
         # Generate the OT C-nets nodes and edges and store in the dictionary
-        ot_nodes, ot_edges, i_seq, o_seq = ot_graph(depgraph, act_total, activities, dep_dict, cnet_inbindings, cnet_outbindings, seq_i, seq_o)
+        ot_nodes, ot_edges, i_seq, o_seq = ot_graph(depgraph, act_total, activity_counts, ot_counts, mean_dict, median_dict, min_dict, max_dict, activities, dep_dict, cnet_inbindings, cnet_outbindings, seq_i, seq_o)
 
         if obj_type not in ot_subgraphs_dict.keys():
             ot_subgraphs_dict[obj_type] = (ot_nodes, ot_edges)

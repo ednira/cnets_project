@@ -8,6 +8,7 @@ import seaborn as sns
 from IPython import display
 from PIL import Image
 
+from pathlib import Path
 
 warnings.filterwarnings('ignore')
 
@@ -170,7 +171,7 @@ def all_ot_visualization(ot_activities, subgraphs_dict, profile=None):
         width = str(row['size']) if row['type'] == 'activity' else '0.3in'
         height = 'default' if row['type'] == 'activity' else '0.3in'
         label = row['label'] if row['label'] != None else None
-        tooltip = f"FREQUENCY: {row['act_total']}" if row['act_total'] != None else None
+        tooltip = row['tooltip'] if row['tooltip'] != None else None
 
 
         if row['type'] != 'activity':
@@ -258,14 +259,27 @@ def all_ot_visualization(ot_activities, subgraphs_dict, profile=None):
    
 
 
-    graph.attr(colorscheme='pastel28', nodesep='0.5', ranksep='0.5', pad='1', splines='spline', rankdir='TB') # , ratio='1.7' , newrank='false'
+    graph.attr(colorscheme='pastel28', nodesep='0.5', ranksep='0.5', pad='1', splines='spline', rankdir='TB') # , ratio='1.7' , newrank='false', concentrate="true"
 
-    # Render the graph
-    graphviz.set_jupyter_format('png')
-    graph.render('graphviz_cnet', format='png', cleanup=True, view=False)
-    # Display the graph in this computer
+    # Render the graph (the previous format was png, then changed to svg)
+    graphviz.set_jupyter_format('svg')
+    graph.render('graphviz_cnet', format='svg', cleanup=True, view=False)
+    #graph.render('graphviz_cnet', format='png', cleanup=True, view=False)
+
+    # Display the graph in this computer (this opens a window with pdf)
     # graph.view()
 
     # Display the graph in Jupyter Notebook
-    img = Image.open('graphviz_cnet.png')
-    display.display_png(img)
+    #img = Image.open('graphviz_cnet.png')
+    #display.display_png(img)
+
+    # Display an svg file inside a cell with tooltips and interactivity
+    class InteractiveSVG:
+        def __init__(self, file_name='./graphviz_cnet.svg'):
+            with open(file_name, 'r', encoding='utf-8') as svg_fh:
+                self.svg_content = svg_fh.read()
+                
+        def _repr_html_(self):
+            return self.svg_content
+
+    display.display(InteractiveSVG('./graphviz_cnet.svg'))
