@@ -1,8 +1,9 @@
 ${\textsf{\huge{\color{teal}Object-centric Causal Nets}}}$
 
-In the paper "Discovering Object-Centric Causal-Nets with Edge-Coarse-Graining in Process Mining", we introduce a new process mining method to discover Object-Centric Causal Nets - OCCN using edge-coarse-graining. This new method extends Causal Nets to enable object-centric analysis and produces simpler models by merging redundant paths in process models using edge-coarse-graining technique. The detailed approach can be found <a href="https://su.diva-portal.org/smash/record.jsf?pid=diva2:1955576">here</a> in the author's master thesis (2024) at Stockholm University portal DIVA. We implemented this method in Python, which is used through a user study, where we compared discovered OCCN and Object-Centric Petri Nets. The result shows that OCCN models are more intuitive and comprehensible, enabling users to recognize patterns better. 
+In the paper "Discovering Object-Centric Causal-Nets with Edge-Coarse-Graining in Process Mining", we introduce a new process mining method to discover Object-Centric Causal Nets - OCCN using edge-coarse-graining. This new method extends Causal Nets to enable object-centric analysis and produces simpler models by merging redundant paths in process models using edge-coarse-graining technique. The detailed approach can be found <a href="https://su.diva-portal.org/smash/record.jsf?pid=diva2:1955576">here</a> in the author's master thesis (2024) at Stockholm University portal DIVA. We implemented this method in Python and evaluated it through a user study, comparing discovered OCCN and Object-Centric Petri Nets. The results are presented in the paper.
 
-This is the repository for the Object-centric C-nets master thesis project at DSV/SU. Folders contain files related to traditional and object-centric process discovery.
+## Repository Contents
+This repository provides supporting material for the paper, including the source code for discovering Object-Centric Causal-Nets with Edge-Coarse-Graining, OCEL 2.0 log files, data.
 
 ### Traditional C-nets
 <img width="120" alt="Cnet" src="https://github.com/ednira/cnets_project/assets/69249709/a0794eb0-7f80-4aa7-bf58-93725495bbef">
