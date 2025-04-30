@@ -1,5 +1,7 @@
 ${\textsf{\huge{\color{teal}Object-centric Causal Nets}}}$
 
+In the paper "Discovering Object-Centric Causal-Nets with Edge-Coarse-Graining in Process Mining", we introduce a new process mining method to discover Object-Centric Causal Nets - OCCN using edge-coarse-graining. This new method extends Causal Nets to enable object-centric analysis and produces simpler models by merging redundant paths in process models using edge-coarse-graining technique. The detailed approach can be found here in the master thesis (2024). We implemented this method in Python, which is used through a user study, where we compared discovered OCCN and Object-Centric Petri Nets. The result shows that OCCN models are more intuitive and comprehensible, enabling users to recognize patterns better. 
+
 This is the repository for the Object-centric C-nets master thesis project at DSV/SU. Folders contain files related to traditional and object-centric process discovery.
 
 ### Traditional C-nets
