@@ -4,7 +4,7 @@ In the paper "Discovering Object-Centric Causal-Nets with Edge-Coarse-Graining i
 
 ## Repository Contents
 This repository provides supporting material for the paper, including the source code for discovering Object-Centric Causal-Nets with Edge-Coarse-Graining, data, a demonstration Jupyter notebook, and dependencies.
-**code**
+**-code**
 **data**
 **demo**
 **dependencies**
