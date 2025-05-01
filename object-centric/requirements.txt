@@ -1,9 +1,0 @@
-processmining==1.0.3
-pandas>=2.1.4
-numpy>=1.26.2
-pm4py==2.7.11.3
-matplotlib>=3.8.2
-seaborn>=0.13.2
-jupyter
-jupyterlab
-Graphviz>=0.20.1
