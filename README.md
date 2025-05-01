@@ -26,7 +26,7 @@ This tool was developed in **[Python 3.11.0](https://www.python.org/downloads/re
 ####
     pip install -r requirements.txt
 
-**3.** Launch jupyter lab using the following command and open the notebook demonstration.ipynb:
+**3.** Launch jupyter lab using the following command and open the notebook demonstration.ipynb, referred to in the previous section:
 
 ####
     jupyter lab
