@@ -7,15 +7,19 @@ This repository provides supporting material for the paper, including the source
 
 - **code**: two algorithms written in Python,for discovery and visualization, are found at <a href=cnets_project/object-centric/code>cnets_project/object-centric/code</a>
 
-### ------- Note for Shahrzad -------- :
-The code is in the folder 'demonstration' now because we still need to "clean" it (cooments etc). When we have the final files they will be moved to the folder 'code' as indicated in the previous bullet. Please, delete this note after reading it, thanks :)
-
-- **demo**:  a <a href=cnets_project/object-centric/notebook/demonstration.ipynb>Jupyter notebook</a> implements the method described in the paper and interactively provides a step-by-step demonstration of the main features
+- **demo**:  a <a href=cnets_project/object-centric/demonstration/demonstration.ipynb>Jupyter notebook</a> implements the method described in the paper and interactively provides a step-by-step demonstration of the main features
   
 - **data**: the order-management OCEL 2.0 event log in the folder <a href=cnets_project/object-centric/data>cnets_project/object-centric/data</a> is used in the demonstration Jupyter notebook. It is a public log obtained by simulating the order management log in the former OCEL standard using CPN-Tools. The <a href="https://zenodo.org/records/8428112">complete description of the order-management business process</a> and <a href="https://www.ocel-standard.org/event-logs/overview/">other public OCEL 2.0 event logs</a> are available. To use them with our algorithm, they should be saved in the <a href=cnets_project/object-centric/data>cnets_project/object-centric/data</a> folder too.
 
-- **dependencies**: the  <a href=cnets_project/object-centric/dependencies/requirements.txt>`requirements.txt`</a> file contains the packages needed
+- **dependencies**: the  <a href=cnets_project/object-centric/requirements.txt>`requirements.txt`</a> file contains the packages needed
 
 ## Setup
 
+This tool was developed in <a href="https://www.python.org/downloads/release/python-3110/">Python 3.11.0</a>. To use it, the following is needed:
 
+**1.** Python should be installed in your computer.
+
+**2.** The packages available in <a href=cnets_project/object-centric/requirements.txt>`requirements.txt`</a> should be installed in your computer. This can be achieved by using the following command:
+
+####
+    pip install -r requirements.txt
