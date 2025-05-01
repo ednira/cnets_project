@@ -23,3 +23,10 @@ This tool was developed in **[Python 3.11.0](https://www.python.org/downloads/re
 
 ####
     pip install -r requirements.txt
+
+**3.** Launch jupyter lab using the following command and open the notebook demonstration.ipynb:
+
+####
+    jupyter lab
+
+Note that any OCEL 2.0 files to be used with the notebook should be located in the **[cnets_project/object-centric/data](./object-centric/data)** . In this project, the order-mamangement file is already provided.
