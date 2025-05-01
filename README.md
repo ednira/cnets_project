@@ -11,7 +11,7 @@ This repository provides supporting material for the paper, including the source
   
 - **data**: the order-management OCEL 2.0 event log in the folder **[cnets_project/object-centric/data](./object-centric/data)** is used in the demonstration Jupyter notebook. It is a public log obtained by simulating the order management log in the former OCEL standard using CPN-Tools. The **[complete description of the order-management business process](https://zenodo.org/records/8428112)** and **[other public OCEL 2.0 event logs](https://www.ocel-standard.org/event-logs/overview/)** are available. To use them with our algorithm, they should be saved in the **[cnets_project/object-centric/data](./object-centric/data)** folder.
 
-- **dependencies**: the **[`requirements.txt`](./object-centric/requirements.txt)** file contains the packages needed.
+- **dependencies**: the **[`requirements.txt`](./requirements.txt)** file contains the packages needed.
 
 ## Setup
 
@@ -19,7 +19,7 @@ This tool was developed in **[Python 3.11.0](https://www.python.org/downloads/re
 
 **1.** Python should be installed in your computer.
 
-**2.** The packages listed in **[`requirements.txt`](./object-centric/requirements.txt)** should be installed in your computer. This can be achieved by using the following command:
+**2.** The packages listed in **[`requirements.txt`](./requirements.txt)** should be installed in your computer. This can be achieved by using the following command:
 
 ####
     pip install -r requirements.txt
