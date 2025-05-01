@@ -9,7 +9,7 @@ This repository provides supporting material for the paper, including the source
 
 - **code**: two algorithms written in Python,for discovery and visualization, are found at **[cnets_project/object-centric/code](./object-centric/code)**
 
-- **demo**:  a **[Jupyter notebook](./object-centric/demonstration/demonstration.ipynb)** implements the method described in the paper and interactively provides a step-by-step demonstration of the main features.
+- **demo**:  the **[`demonstration.ipynb`](./object-centric/demonstration/demonstration.ipynb)**  Jupyter notebook implements the method described in the paper and interactively provides a step-by-step demonstration of the main features.
   
 - **data**: the order-management OCEL 2.0 event log in the folder **[cnets_project/object-centric/data](./object-centric/data)** is used in the demonstration Jupyter notebook. It is a public log obtained by simulating the order management log in the former OCEL standard using CPN-Tools. The **[complete description of the order-management business process](https://zenodo.org/records/8428112)** and **[other public OCEL 2.0 event logs](https://www.ocel-standard.org/event-logs/overview/)** are available. To use them with our algorithm, they should be saved in the **[cnets_project/object-centric/data](./object-centric/data)** folder.
 
