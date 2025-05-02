@@ -1,7 +1,7 @@
 # Discovering Object-Centric Causal-Nets with Edge-Coarse-Graining in Process Mining
 
 This repository contains supporting information for a project on the discovery of **Object-Centric Causal Nets (OCCN)** from **Object-Centric Event Logs (OCEL 2.0)**.  
-The project began on **2024-01-15** as a **master thesis** at the [Department of Computer and Systems Sciences](https://dsv.su.se), Stockholm University, and concluded on **2024-09-20**.  
+The project began on **2024-01-15** as a **master thesis** at the [Department of Computer and Systems Sciences](https://dsv.su.se), Stockholm University, and concluded on **2024-11-02**.  
 The thesis can be found in the Stockholm University repository:  
 📄 <a href="https://su.diva-portal.org/smash/record.jsf?pid=diva2:1955576">https://su.diva-portal.org/smash/record.jsf?pid=diva2:1955576</a>
 
