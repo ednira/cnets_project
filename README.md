@@ -57,7 +57,7 @@ This repository provides supporting material for the paper organized thorugh the
 
 - **code**: This directory contains two algorithms written in Python supporting OCCN discovery and visualization. 
 
-- **demo**:  This directory contains the **[`demonstration.ipynb`](./object-centric/demonstration/demonstration.ipynb)**  Jupyter notebook that implements the method described in the paper and interactively provides a step-by-step demonstration of the main features. This directory also contains the order-management OCEL 2.0 event log which is used in the demo. It is a public log obtained by simulating the order management log in the former OCEL standard using CPN-Tools. The **[complete description of the order-management business process](https://zenodo.org/records/8428112)** and **[other public OCEL 2.0 event logs](https://www.ocel-standard.org/event-logs/overview/)** are available at OCEL 2.0 website. To use them with our algorithm, they should be saved in this folder.
+- **demo**:  This directory contains the **[`demonstration.ipynb`](./object-centric/demonstration/demonstration.ipynb)**  Jupyter notebook that implements the method described in the paper and interactively provides a step-by-step demonstration of the main features. The order-management OCEL 2.0 event log is used in the demo. It is a public log obtained by simulating the order management log in the former OCEL standard using CPN-Tools. The **[complete description of the order-management business process](https://zenodo.org/records/8428112)** and **[other public OCEL 2.0 event logs](https://www.ocel-standard.org/event-logs/overview/)** are available at OCEL 2.0 website. To use them with our algorithm, they should be saved in this folder.
 
 
 
