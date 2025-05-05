@@ -263,11 +263,12 @@ def all_ot_visualization(ot_activities, subgraphs_dict, profile=None):
 
     # Render the graph (the previous format was png, then changed to svg)
     graphviz.set_jupyter_format('svg')
+
+    #graph.render('graphviz_cnet', format='pdf', cleanup=True, view=False)
     graph.render('graphviz_cnet', format='svg', cleanup=True, view=False)
-    #graph.render('graphviz_cnet', format='png', cleanup=True, view=False)
 
     # Display the graph in this computer (this opens a window with pdf)
-    # graph.view()
+    #graph.view()
 
     # Display the graph in Jupyter Notebook
     #img = Image.open('graphviz_cnet.png')
