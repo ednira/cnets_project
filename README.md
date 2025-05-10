@@ -25,17 +25,12 @@ The approach has been **implemented in Python**, demonstrated using public OCEL 
 │   ├── object-centric/
 │   │   ├── code/
 │   │   │   ├── discover_occnets.py       # OCCN discovery logic
-│   │   │   ├── view_occnets_jupyter.py   # Visualization module for OCCN
-│   │   ├── data/
-│   │   │   ├── order-management.json     # Sample OCEL log in JSON format
-│   │   │   ├── order-management.sqlite   # Sample OCEL log in SQLite format
+│   │   │   ├── view_occnets_jupyter.py   # OCCN visualization module
 │   │   ├── demonstration/
 │   │   │   ├── demonstration.ipynb       # End-to-end demo notebook
-│   │   │   ├── discover_occnets.py       # Duplicate of discovery logic for demo use
-│   │   │   ├── order-management.json     # Log used in demo
+│   │   │   ├── discover_occnets.py       # Duplicate of discovery logic for notebook use
 │   │   │   ├── view_occnets_jupyter.py   # Duplicate visualizer for notebook use
 ```
-
 
 
 ## 🚀 Getting Started
